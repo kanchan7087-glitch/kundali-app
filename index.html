@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>शुभ कुंडली | आपकी जन्म कुंडली</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff8ed;
+      color: #44220d;
+    }
+
+    header {
+      background: #7b160e;
+      color: white;
+      text-align: center;
+      padding: 24px 12px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 25px auto;
+      padding: 22px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px #00000012;
+    }
+
+    h2 {
+      text-align: center;
+      color: #8a2515;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d8c4b1;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #a52a16;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    #result {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff0d7;
+      border-radius: 10px;
+      line-height: 1.7;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #755b4a;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🔱 शुभ कुंडली 🔱</h1>
+    <p>अपने जीवन की ज्योतिषीय यात्रा शुरू करें</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>अपनी जन्म जानकारी भरें</h2>
+
+      <form id="kundaliForm">
+        <label for="name">आपका नाम</label>
+        <input id="name" type="text" placeholder="अपना नाम लिखें" required>
+
+        <label for="dob">जन्म तिथि</label>
+        <input id="dob" type="date" required>
+
+        <label for="time">जन्म का समय</label>
+        <input id="time" type="time" required>
+
+        <label for="place">जन्म स्थान</label>
+        <input id="place" type="text" placeholder="शहर का नाम लिखें" required>
+
+        <button type="submit">मेरी जानकारी देखें</button>
+      </form>
+
+      <div id="result" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 शुभ कुंडली | आपकी आस्था, आपकी परंपरा
+  </footer>
+
+  <script>
+    document.getElementById("kundaliForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const dob = document.getElementById("dob").value;
+      const time = document.getElementById("time").value;
+      const place = document.getElementById("place").value.trim();
+
+      const result = document.getElementById("result");
+      result.style.display = "block";
+      result.innerHTML = `
+        <h3>🙏 धन्यवाद, ${name} जी!</h3>
+        <p>आपकी जन्म जानकारी दर्ज हो गई है।</p>
+        <p><strong>जन्म तिथि:</strong> ${dob}</p>
+        <p><strong>जन्म समय:</strong> ${time}</p>
+        <p><strong>जन्म स्थान:</strong> ${place}</p>
+        <p>वास्तविक ग्रहों की गणना और जन्म कुंडली बनाने की सुविधा अगले चरण में जोड़ी जाएगी।</p>
+      `;
+    });
+  </script>
+
+</body>
+      </html>
