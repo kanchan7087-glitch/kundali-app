@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | शुभ कुंडली</title>
+</head>
+<body style="font-family:Arial; padding:20px; background:#fff8ed; color:#44220d;">
+
+<h1>संपर्क करें</h1>
+
+<p>शुभ कुंडली का उपयोग करने के लिए धन्यवाद।</p>
+
+<p>यदि आपको हमारी सेवाओं, भुगतान या रिपोर्ट
+से संबंधित कोई प्रश्न है, तो हमसे संपर्क करें।</p>
+
+<h3>ईमेल</h3>
+
+<p>अपना वास्तविक संपर्क ईमेल यहाँ लिखें।</p>
+
+<p>ईमेल: YOUR_EMAIL@example.com</p>
+
+<p>हम आपके प्रश्नों का उत्तर देने का प्रयास करेंगे।</p>
+
+<p><a href="index.html">मुख्य पेज पर वापस जाएँ</a></p>
+
+</body>
+</html>
