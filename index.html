@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>शुभ कुंडली | आपकी जन्म कुंडली</title>
+
   <style>
     * {
       box-sizing: border-box;
@@ -74,6 +75,7 @@
       color: white;
       font-size: 17px;
       font-weight: bold;
+      cursor: pointer;
     }
 
     #result {
@@ -87,11 +89,22 @@
 
     footer {
       text-align: center;
-      padding: 20px;
-      color: #755b4a;
+      padding: 25px;
+      background: #fff0d8;
+      color: #44220d;
+    }
+
+    footer a {
+      color: #7b160e;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
+
 <body>
 
   <header>
@@ -101,86 +114,108 @@
 
   <main class="container">
     <section class="card">
+
       <h2>अपनी जन्म जानकारी भरें</h2>
 
       <form id="kundaliForm">
+
         <label for="name">आपका नाम</label>
-        <input id="name" type="text" placeholder="अपना नाम लिखें" required>
+        <input
+          id="name"
+          type="text"
+          placeholder="अपना नाम लिखें"
+          required
+        >
 
         <label for="dob">जन्म तिथि</label>
-        <input id="dob" type="date" required>
+        <input
+          id="dob"
+          type="date"
+          required
+        >
 
         <label for="time">जन्म का समय</label>
-        <input id="time" type="time" required>
+        <input
+          id="time"
+          type="time"
+          required
+        >
 
         <label for="place">जन्म स्थान</label>
-        <input id="place" type="text" placeholder="शहर का नाम लिखें" required>
+        <input
+          id="place"
+          type="text"
+          placeholder="शहर का नाम लिखें"
+          required
+        >
 
         <button type="submit">मेरी जानकारी देखें</button>
+
       </form>
 
       <div id="result" aria-live="polite"></div>
+
     </section>
   </main>
 
   <footer>
-    © 2026 शुभ कुंडली | आपकी आस्था, आपकी परंपरा
-  </footer>
-
-  <script>
-    document.getElementById("kundaliForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-
-      const name = document.getElementById("name").value.trim();
-      const dob = document.getElementById("dob").value;
-      const time = document.getElementById("time").value;
-      const place = document.getElementById("place").value.trim();
-
-      const result = document.getElementById("result");
-      result.style.display = "block";
-      result.innerHTML = `
-        <h3>🙏 धन्यवाद, ${name} जी!</h3>
-        <p>आपकी जन्म जानकारी दर्ज हो गई है।</p>
-        <p><strong>जन्म तिथि:</strong> ${dob}</p>
-        <p><strong>जन्म समय:</strong> ${time}</p>
-        <p><strong>जन्म स्थान:</strong> ${place}</p>
-        <p>वास्तविक ग्रहों की गणना और जन्म कुंडली बनाने की सुविधा अगले चरण में जोड़ी जाएगी।</p>
-      `;
-    });
-  </script></script>
-
-<footer style="text-align:center; padding:25px; background:#fff0d8; color:#44220d;">
 
     <h3>शुभ कुंडली</h3>
 
-    <p><a href="about.html">About Us | हमारे बारे में</a></p>
+    <p>
+      <a href="about.html">About Us | हमारे बारे में</a>
+    </p>
 
-    <p><a href="contact.html">Contact Us | संपर्क करें</a></p>
+    <p>
+      <a href="contact.html">Contact Us | संपर्क करें</a>
+    </p>
 
-    <p><a href="privacy.html">Privacy Policy | गोपनीयता नीति</a></p>
+    <p>
+      <a href="privacy.html">Privacy Policy | गोपनीयता नीति</a>
+    </p>
 
-    <p><a href="terms.html">Terms & Conditions | नियम और शर्तें</a></p>
+    <p>
+      <a href="terms.html">Terms &amp; Conditions | नियम और शर्तें</a>
+    </p>
 
-    <p><a href="refund.html">Refund & Cancellation Policy | रिफंड नीति</a></p>
+    <p>
+      <a href="refund.html">Refund &amp; Cancellation Policy | रिफंड नीति</a>
+    </p>
 
-</footer>
+    <p>© 2026 शुभ कुंडली | आपकी आस्था, आपकी परंपरा</p>
+
+  </footer>
+
+  <script>
+    document.getElementById("kundaliForm").addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const dob = document.getElementById("dob").value;
+        const time = document.getElementById("time").value;
+        const place = document.getElementById("place").value.trim();
+
+        const result = document.getElementById("result");
+
+        result.style.display = "block";
+
+        result.innerHTML = `
+          <h3>🙏 धन्यवाद, ${name} जी!</h3>
+          <p>आपकी जन्म जानकारी दर्ज हो गई है।</p>
+          <p><strong>जन्म तिथि:</strong> ${dob}</p>
+          <p><strong>जन्म समय:</strong> ${time}</p>
+          <p><strong>जन्म स्थान:</strong> ${place}</p>
+          <p>
+            वास्तविक ग्रहों की गणना और जन्म कुंडली बनाने की
+            सुविधा अगले चरण में जोड़ी जाएगी।
+          </p>
+        `;
+      }
+    );
+  </script>
 
 </body>
 </html>
-<footer style="text-align:center; padding:25px; background:#fff0d8; color:#44220d;">
-
-<h3>शुभ कुंडली</h3>
-
-<p><a href="about.html">About Us | हमारे बारे में</a></p>
-
-<p><a href="contact.html">Contact Us | संपर्क करें</a></p>
-
-<p><a href="privacy.html">Privacy Policy | गोपनीयता नीति</a></p>
-
-<p><a href="terms.html">Terms & Conditions | नियम और शर्तें</a></p>
-
-<p><a href="refund.html">Refund & Cancellation Policy | रिफंड नीति</a></p>
-
-</footer>
-</body>
-      </html>
