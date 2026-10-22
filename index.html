@@ -64,7 +64,6 @@
       outline: 3px solid #e0a43a;
       outline-offset: 2px;
     }
-    .hint { font-size: 13px; color: #7a5a45; margin: 6px 0 0; }
 
     button {
       width: 100%;
@@ -110,6 +109,7 @@
     .chart { max-width: 360px; margin: 15px auto; }
     .chart svg { width: 100%; height: auto; display: block; }
     .chart polygon { fill: #fffaf1; stroke: #8a2515; stroke-width: 1.6; }
+    .chart line { stroke: #8a2515; stroke-width: 1.6; }
     .chart .rn { font-size: 12px; fill: #9a7a65; font-weight: bold; }
     .chart .pl { font-size: 13px; font-weight: bold; fill: #44220d; }
 
@@ -118,15 +118,18 @@
     th, td { padding: 8px 10px; text-align: center; border: 1px solid #efdcc4; white-space: nowrap; }
     th { background: #fff0d7; color: #7b160e; }
 
+    /* PDF Printable Container */
+    #pdfPrintArea { padding: 15px; background: #ffffff; }
+
     .info h3 { margin-top: 18px; }
     .info p { margin: 6px 0; }
 
-    footer { text-align: center; padding: 25px; background: #fff0d8; }
+    footer { text-align: center; padding: 25px; background: #fff0d8; margin-top: 30px; }
     footer a { color: #7b160e; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
     footer p { margin: 6px 0; }
 
-    /* PDF / Payment Box */
+    /* Payment Container */
     .pay { margin-top: 22px; padding: 16px; background: #fff0d7; border-radius: 12px; text-align: center; }
     .pay p { margin: 0; font-size: 14px; color: #7a5a45; }
     .pay button { margin-top: 12px; background: #2e7d32; }
@@ -158,7 +161,6 @@
 
         <label for="place">जन्म स्थान (भारत)</label>
         <input id="place" type="text" placeholder="जैसे: सीतापुर, उत्तर प्रदेश" maxlength="80" required>
-        <p class="hint">सही जगह के लिए शहर के साथ राज्य भी लिखें।</p>
 
         <button type="submit" id="btn">मेरी कुंडली बनाएँ</button>
       </form>
@@ -170,10 +172,10 @@
     <section class="card" id="result">
       <h2>आपकी जन्म कुंडली</h2>
       
-      <!-- Printable & Downloadable Content Container -->
-      <div id="kundaliContent">
+      <!-- Printable Container for PDF -->
+      <div id="pdfPrintArea">
         <div id="summaryArea"></div>
-        <h4>लग्न कुंडली (North Indian Chart)</h4>
+        <h4>जन्म लग्न कुंडली</h4>
         <div class="chart" id="chartArea"></div>
         <h4>ग्रह स्थिति विवरण</h4>
         <div class="tbl" id="grahaTableArea"></div>
@@ -205,11 +207,17 @@
     <p>© 2026 शुभ कुंडली | आपकी आस्था, आपकी परंपरा</p>
   </footer>
 
-  <script>
-    /* ---------- Razorpay Key ---------- */
-    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; // Apni Key Yahan Dalein
+  <!-- Astronomy Engine Library -->
+  <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
 
-    const RASHI = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+  <script>
+    /* ---------- RAZORPAY LIVE KEY INTEGRATED ---------- */
+    const RAZORPAY_KEY_ID = "rzp_live_TqmQuCXdQDK5fN"; 
+
+    const RASHI_NAMES = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+    const NAKSHATRAS = ['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा',
+      'मघा','पूर्व फाल्गुनी','उत्तर फाल्गुनी','हस्त','चित्रा','स्वाति','विशाखा','अनुराधा','ज्येष्ठा',
+      'मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्व भाद्रपद','उत्तर भाद्रपद','रेवती'];
 
     document.getElementById('kundaliForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -224,25 +232,37 @@
         return;
       }
 
-      // Render Summary
-      document.getElementById('summaryArea').innerHTML = `
-        <div class="summary">
-          <div><span>नाम:</span> <b>${name}</b></div>
-          <div><span>जन्म तिथि:</span> <b>${dob}</b></div>
-          <div><span>समय:</span> <b>${time}</b></div>
-          <div><span>स्थान:</span> <b>${place}</b></div>
-        </div>
-      `;
+      document.getElementById('btn').disabled = true;
+      document.getElementById('btn').innerText = "गणना की जा रही है...";
 
-      // Render SVG Chart
-      renderChart();
+      try {
+        // Render Summary
+        document.getElementById('summaryArea').innerHTML = `
+          <div class="summary">
+            <div><span>नाम:</span> <b>${name}</b></div>
+            <div><span>जन्म तिथि:</span> <b>${dob}</b></div>
+            <div><span>समय:</span> <b>${time}</b></div>
+            <div><span>स्थान:</span> <b>${place}</b></div>
+          </div>
+        `;
 
-      // Render Graha Table
-      renderGrahaTable();
+        // Calculate Grahas using Astronomy Engine
+        const dateObj = new Date(`${dob}T${time}:00`);
+        const grahaData = calculatePlanets(dateObj);
 
-      document.getElementById('result').style.display = 'block';
-      document.getElementById('error').style.display = 'none';
-      document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        // Render SVG Chart & Table
+        renderChart();
+        renderGrahaTable(grahaData);
+
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('error').style.display = 'none';
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+      } catch(err) {
+        showError("कुंडली बनाने में समस्या आई, कृपया दोबारा प्रयास करें।");
+      } finally {
+        document.getElementById('btn').disabled = false;
+        document.getElementById('btn').innerText = "मेरी कुंडली बनाएँ";
+      }
     });
 
     function showError(msg) {
@@ -251,17 +271,39 @@
       err.style.display = 'block';
     }
 
+    function calculatePlanets(date) {
+      const bodies = [
+        { name: 'सूर्य', body: Astronomy.Body.Sun },
+        { name: 'चंद्रमा', body: Astronomy.Body.Moon },
+        { name: 'मंगल', body: Astronomy.Body.Mars },
+        { name: 'बुध', body: Astronomy.Body.Mercury },
+        { name: 'गुरु', body: Astronomy.Body.Jupiter },
+        { name: 'शुक्र', body: Astronomy.Body.Venus },
+        { name: 'शनि', body: Astronomy.Body.Saturn }
+      ];
+
+      return bodies.map(b => {
+        const pos = Astronomy.Ecliptic(b.body, date);
+        const lon = (pos.elon + 360) % 360;
+        const rashiIdx = Math.floor(lon / 30);
+        const nakIdx = Math.floor(lon / (360 / 27));
+        return {
+          name: b.name,
+          rashi: RASHI_NAMES[rashiIdx],
+          nakshatra: NAKSHATRAS[nakIdx]
+        };
+      });
+    }
+
     function renderChart() {
-      // Standard North Indian Kundali SVG Structure
       const svgHTML = `
         <svg viewBox="0 0 300 300">
           <polygon points="0,0 300,0 300,300 0,300" />
-          <line x1="0" y1="0" x2="300" y2="300" stroke="#8a2515" stroke-width="1.6" />
-          <line x1="300" y1="0" x2="0" y2="300" stroke="#8a2515" stroke-width="1.6" />
+          <line x1="0" y1="0" x2="300" y2="300" />
+          <line x1="300" y1="0" x2="0" y2="300" />
           <polygon points="150,0 300,150 150,300 0,150" />
           
-          <!-- House Numbers -->
-          <text x="145" y="120" class="rn">1</text>
+          <text x="145" y="115" class="rn">1</text>
           <text x="70" y="45" class="rn">2</text>
           <text x="40" y="75" class="rn">3</text>
           <text x="120" y="145" class="rn">4</text>
@@ -274,55 +316,35 @@
           <text x="255" y="75" class="rn">11</text>
           <text x="225" y="45" class="rn">12</text>
 
-          <!-- Sample Positions -->
-          <text x="135" y="80" class="pl">सू, मं</text>
+          <text x="130" y="75" class="pl">सू, मं</text>
           <text x="50" y="130" class="pl">चं</text>
           <text x="135" y="230" class="pl">गु</text>
-          <text x="210" y="130" class="pl">रा, श</text>
+          <text x="200" y="130" class="pl">रा, श</text>
         </svg>
       `;
       document.getElementById('chartArea').innerHTML = svgHTML;
     }
 
-    function renderGrahaTable() {
+    function renderGrahaTable(data) {
+      let rows = data.map(d => `<tr><td>${d.name}</td><td>${d.rashi}</td><td>${d.nakshatra}</td></tr>`).join('');
       const tableHTML = `
         <table>
           <thead>
-            <tr>
-              <th>ग्रह</th>
-              <th>राशि</th>
-              <th>नक्षत्र</th>
-            </tr>
+            <tr><th>ग्रह</th><th>राशि</th><th>नक्षत्र</th></tr>
           </thead>
-          <tbody>
-            <tr><td>सूर्य</td><td>सिंह</td><td>मघा</td></tr>
-            <tr><td>चंद्रما</td><td>कर्क</td><td>पुष्य</td></tr>
-            <tr><td>मंगल</td><td>मेष</td><td>अश्विनी</td></tr>
-            <tr><td>बुध</td><td>कन्या</td><td>हस्त</td></tr>
-            <tr><td>गुरु</td><td>धनु</td><td>मूल</td></tr>
-            <tr><td>शुक्र</td><td>तुला</td><td>स्वाति</td></tr>
-            <tr><td>शनि</td><td>कुंभ</td><td>शतभिषा</td></tr>
-            <tr><td>राहु</td><td>मीन</td><td>रेवती</td></tr>
-            <tr><td>केतु</td><td>कन्या</td><td>चित्रा</td></tr>
-          </tbody>
+          <tbody>${rows}</tbody>
         </table>
       `;
       document.getElementById('grahaTableArea').innerHTML = tableHTML;
     }
 
-    /* ---------- Payment & Download Functionality ---------- */
+    /* ---------- PAYMENT & DOWNLOAD SYSTEM ---------- */
     function payAndDownload() {
-      const userName = document.getElementById('name').value || "Kundali";
-
-      if(RAZORPAY_KEY_ID === "rzp_test_YOUR_KEY_HERE") {
-        alert("Razorpay Key ID missing hai! Demo PDF Download ho rahi hai.");
-        generatePDF();
-        return;
-      }
+      const userName = document.getElementById('name').value || "User";
 
       const options = {
         "key": RAZORPAY_KEY_ID,
-        "amount": 4900, // ₹49 in Paise
+        "amount": 4900, // ₹49 in paise
         "currency": "INR",
         "name": "शुभ कुंडली",
         "description": "जन्म कुंडली PDF डाउनलोड शुल्क",
@@ -343,14 +365,14 @@
     }
 
     function generatePDF() {
-      const element = document.getElementById('kundaliContent');
+      const element = document.getElementById('pdfPrintArea');
       const userName = document.getElementById('name').value || "Kundali";
 
       const opt = {
         margin:       [10, 10, 10, 10],
-        filename:     `${userName}_Janm_Kundali.pdf`,
+        filename:     `${userName}_Kundali.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
