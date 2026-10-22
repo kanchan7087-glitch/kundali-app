@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>शुभ कुंडली | मुफ़्त जन्म कुंडली</title>
+  <meta name="description" content="अपनी जन्म तिथि, समय और स्थान से जन्म कुंडली बनाएँ। लग्न, राशि, नक्षत्र, ग्रह स्थिति और विंशोत्तरी महादशा के साथ।">
+  <meta property="og:title" content="शुभ कुंडली | जन्म कुंडली">
+  <meta property="og:description" content="लग्न, राशि, नक्षत्र, ग्रह स्थिति और महादशा।">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔱%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Noto Sans Devanagari", "Mangal", Arial, sans-serif; background: #fff8ed; color: #44220d; line-height: 1.6; }
+    header { background: #7b160e; color: #fff; text-align: center; padding: 24px 12px; }
+    header h1 { margin: 0 0 8px; font-size: 30px; }
+    header p { margin: 0; }
+    .container { max-width: 720px; margin: 25px auto; padding: 0 14px; }
+    .card { background: #fff; padding: 22px; border-radius: 16px; box-shadow: 0 4px 18px #00000012; margin-bottom: 20px; }
+    h2 { text-align: center; color: #8a2515; margin-top: 0; }
+    h3 { color: #7b160e; margin-bottom: 4px; }
+    h4 { color: #8a2515; margin: 22px 0 8px; font-size: 18px; text-align: center; }
+    label { display: block; margin: 15px 0 7px; font-weight: bold; }
+    input { width: 100%; padding: 12px; border: 1px solid #d8c4b1; border-radius: 8px; font-size: 16px; font-family: inherit; }
+    input:focus-visible, button:focus-visible { outline: 3px solid #e0a43a; outline-offset: 2px; }
+    button { width: 100%; margin-top: 22px; padding: 14px; border: none; border-radius: 8px; background: #a52a16; color: #fff; font-size: 17px; font-weight: bold; font-family: inherit; cursor: pointer; }
+    button:disabled { opacity: .65; cursor: wait; }
+    .hint { font-size: 13px; color: #7a5a45; margin: 6px 0 0; }
+    #manual { display: none; margin-top: 8px; padding: 12px; background: #fff0d7; border-radius: 10px; }
+    #manual .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    #error { display: none; margin-top: 16px; padding: 12px; background: #fde8e4; border-left: 4px solid #a52a16; border-radius: 6px; }
+    #result { display: none; }
+    .summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    .summary div { background: #fff0d7; border-radius: 10px; padding: 10px 12px; }
+    .summary span { display: block; font-size: 13px; color: #7a5a45; }
+    .summary b { font-size: 16px; word-break: break-word; }
+    .chart { max-width: 360px; margin: 15px auto; text-align: center; }
+    .chart svg { width: 100%; height: auto; max-width: 350px; display: block; margin: 0 auto; background: #fffaf1; }
+    .chart polygon { fill: #fffaf1; stroke: #8a2515; stroke-width: 1.6; }
+    .chart line { stroke: #8a2515; stroke-width: 1.6; }
+    .chart .rn { font-size: 11px; fill: #9a7a65; font-weight: bold; }
+    .chart .pl { font-size: 13px; font-weight: bold; fill: #44220d; }
+    .tbl { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+    th, td { padding: 8px 10px; text-align: center; border: 1px solid #efdcc4; white-space: nowrap; }
+    th { background: #fff0d7; color: #7b160e; }
+    #pdfPrintArea { padding: 15px; background: #fff; border-radius: 8px; }
+    .note { font-size: 12px; color: #7a5a45; text-align: center; margin-top: 14px; }
+    .info h3 { margin-top: 18px; }
+    .info p { margin: 6px 0; }
+    footer { text-align: center; padding: 25px; background: #fff0d8; margin-top: 30px; }
+    footer a { color: #7b160e; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    footer p { margin: 6px 0; }
+    .pay { margin-top: 22px; padding: 16px; background: #fff0d7; border-radius: 12px; text-align: center; }
+    .pay p { margin: 0; font-size: 14px; color: #7a5a45; }
+    .pay button { margin-top: 12px; background: #2e7d32; }
+    .pay button:hover { background: #1b5e20; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🔱 शुभ कुंडली 🔱</h1>
+    <p>अपने जीवन की ज्योतिषीय यात्रा शुरू करें</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>अपनी जन्म जानकारी भरें</h2>
+      <form id="kundaliForm" novalidate>
+        <label for="name">आपका नाम</label>
+        <input id="name" type="text" placeholder="अपना नाम लिखें" maxlength="60" required>
+
+        <label for="dob">जन्म तिथि</label>
+        <input id="dob" type="date" min="1900-01-01" required>
+
+        <label for="time">जन्म का समय (भारतीय समय, IST)</label>
+        <input id="time" type="time" required>
+
+        <label for="place">जन्म स्थान (भारत)</label>
+        <input id="place" type="text" list="cityList" placeholder="शहर चुनें, जैसे: सीतापुर" maxlength="80" autocomplete="off" required>
+        <datalist id="cityList"></datalist>
+        <p class="hint">सूची से शहर चुनें। अपना शहर न मिले तो अक्षांश-देशांतर खुद भरने का विकल्प खुलेगा।</p>
+
+        <div id="manual">
+          <div class="row">
+            <div>
+              <label for="lat" style="margin-top:0">अक्षांश (Latitude)</label>
+              <input id="lat" type="number" step="0.01" min="6" max="37" placeholder="जैसे 27.57">
+            </div>
+            <div>
+              <label for="lon" style="margin-top:0">देशांतर (Longitude)</label>
+              <input id="lon" type="number" step="0.01" min="68" max="98" placeholder="जैसे 80.68">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="btn">मेरी कुंडली बनाएँ</button>
+      </form>
+      <div id="error" role="alert"></div>
+    </section>
+
+    <section class="card" id="result">
+      <h2>आपकी जन्म कुंडली</h2>
+
+      <div id="pdfPrintArea">
+        <div id="summaryArea"></div>
+        <h4>जन्म लग्न कुंडली</h4>
+        <div class="chart" id="chartArea"></div>
+        <h4>ग्रह स्थिति विवरण</h4>
+        <div class="tbl" id="grahaTableArea"></div>
+        <h4>विंशोत्तरी महादशा</h4>
+        <div class="tbl" id="dashaTableArea"></div>
+        <p class="note">निरयन (लाहिरी अयनांश), सम्पूर्ण-राशि भाव, माध्य राहु-केतु। यह कुंडली सामान्य जानकारी के लिए है।</p>
+      </div>
+
+      <div class="pay">
+        <h3>पीडीएफ (PDF) डाउनलोड करें</h3>
+        <p>अपनी जन्म कुंडली PDF में सुरक्षित रखने के लिए भुगतान करें।</p>
+        <button id="payBtn" type="button">₹49 - भुगतान करें और PDF डाउनलोड करें</button>
+        <div id="payMsg" class="hint"></div>
+      </div>
+    </section>
+
+    <section class="card info">
+      <h2>कुंडली कैसे बनती है</h2>
+      <p>जन्म के समय आकाश में ग्रह किस राशि में थे, उसी का नक्शा जन्म कुंडली है। पूर्व दिशा में उगती राशि को लग्न कहते हैं।</p>
+      <h3>हमारी गणना की विधि</h3>
+      <p>निरयन (वैदिक) पद्धति, लाहिरी अयनांश, सम्पूर्ण-राशि भाव (whole sign), माध्य राहु-केतु और विंशोत्तरी दशा। ग्रहों की गणना आपके ब्राउज़र में होती है।</p>
+      <p>ध्यान दें: समय भारतीय मानक समय (IST) माना जाता है। 1947 से पहले के जन्मों में स्थानीय समय अलग हो सकता है, इसलिए परिणाम कुछ अंश अलग आ सकते हैं।</p>
+      <h3>गोपनीयता</h3>
+      <p>कुंडली की गणना के लिए आपका नाम और जन्म विवरण हमारे सर्वर पर नहीं भेजा जाता। फ़ॉन्ट और भुगतान सेवाएँ (Google Fonts, Razorpay) बाहरी सेवाएँ हैं। भुगतान की जानकारी Razorpay सँभालता है; हमें आपके कार्ड या UPI का विवरण नहीं मिलता।</p>
+    </section>
+  </main>
+
+  <footer>
+    <h3>शुभ कुंडली</h3>
+    <p><a href="about.html">About Us | हमारे बारे में</a> | <a href="contact.html">Contact Us | संपर्क करें</a></p>
+    <p><a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms &amp; Conditions</a> | <a href="refund.html">Refund Policy</a></p>
+    <p>© 2026 शुभ कुंडली | आपकी आस्था, आपकी परंपरा</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+
+  <script>
+    /* ---------- CONFIG ---------- */
+    // Key ID public hoti hai. Key SECRET kabhi yahan mat daalna (sirf server.js mein).
+    const RAZORPAY_KEY_ID = "rzp_test_Tqq0KnJYpxpTjz";
+    // Apne Cloudflare Worker ka URL yahan daalein (aakhir mein / mat lagana).
+    // Jaise: "https://kundali.aapka-naam.workers.dev"
+    const API_BASE = "https://kundali.kanchan7087.workers.dev";
+
+    /* ---------- DATA ---------- */
+    const RASHI_NAMES = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
+    const NAKSHATRAS = ['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा',
+      'मघा','पूर्व फाल्गुनी','उत्तर फाल्गुनी','हस्त','चित्रा','स्वाति','विशाखा','अनुराधा','ज्येष्ठा',
+      'मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्व भाद्रपद','उत्तर भाद्रपद','रेवती'];
+
+    // हिंदी | English | राज्य | lat | lon
+    const CITY_RAW = [
+      'दिल्ली|delhi|दिल्ली|28.61|77.21','मुंबई|mumbai|महाराष्ट्र|19.08|72.88','कोलकाता|kolkata|पश्चिम बंगाल|22.57|88.36',
+      'चेन्नई|chennai|तमिलनाडु|13.08|80.27','बेंगलुरु|bengaluru|कर्नाटक|12.97|77.59','हैदराबाद|hyderabad|तेलंगाना|17.39|78.49',
+      'अहमदाबाद|ahmedabad|गुजरात|23.02|72.57','पुणे|pune|महाराष्ट्र|18.52|73.86','जयपुर|jaipur|राजस्थान|26.91|75.79',
+      'लखनऊ|lucknow|उत्तर प्रदेश|26.85|80.95','कानपुर|kanpur|उत्तर प्रदेश|26.45|80.35','नागपुर|nagpur|महाराष्ट्र|21.15|79.09',
+      'इंदौर|indore|मध्य प्रदेश|22.72|75.86','भोपाल|bhopal|मध्य प्रदेश|23.26|77.41','पटना|patna|बिहार|25.59|85.14',
+      'वाराणसी|varanasi|उत्तर प्रदेश|25.32|83.01','प्रयागराज|prayagraj|उत्तर प्रदेश|25.44|81.85','आगरा|agra|उत्तर प्रदेश|27.18|78.01',
+      'मेरठ|meerut|उत्तर प्रदेश|28.98|77.71','गाज़ियाबाद|ghaziabad|उत्तर प्रदेश|28.67|77.45','नोएडा|noida|उत्तर प्रदेश|28.54|77.39',
+      'गोरखपुर|gorakhpur|उत्तर प्रदेश|26.76|83.37','सीतापुर|sitapur|उत्तर प्रदेश|27.57|80.68','बरेली|bareilly|उत्तर प्रदेश|28.37|79.43',
+      'मुरादाबाद|moradabad|उत्तर प्रदेश|28.84|78.78','अलीगढ़|aligarh|उत्तर प्रदेश|27.88|78.08','झाँसी|jhansi|उत्तर प्रदेश|25.45|78.57',
+      'सहारनपुर|saharanpur|उत्तर प्रदेश|29.97|77.55','मथुरा|mathura|उत्तर प्रदेश|27.49|77.67','अयोध्या|ayodhya|उत्तर प्रदेश|26.80|82.20',
+      'देहरादून|dehradun|उत्तराखंड|30.32|78.03','हरिद्वार|haridwar|उत्तराखंड|29.95|78.16','हल्द्वानी|haldwani|उत्तराखंड|29.22|79.51',
+      'चंडीगढ़|chandigarh|चंडीगढ़|30.73|76.78','अमृतसर|amritsar|पंजाब|31.63|74.87','लुधियाना|ludhiana|पंजाब|30.90|75.86',
+      'जम्मू|jammu|जम्मू-कश्मीर|32.73|74.86','श्रीनगर|srinagar|जम्मू-कश्मीर|34.08|74.80','शिमला|shimla|हिमाचल प्रदेश|31.10|77.17',
+      'रांची|ranchi|झारखंड|23.34|85.31','जमशेदपुर|jamshedpur|झारखंड|22.80|86.20','रायपुर|raipur|छत्तीसगढ़|21.25|81.63',
+      'भुवनेश्वर|bhubaneswar|ओडिशा|20.30|85.82','गुवाहाटी|guwahati|असम|26.14|91.74','सूरत|surat|गुजरात|21.17|72.83',
+      'वडोदरा|vadodara|गुजरात|22.31|73.18','राजकोट|rajkot|गुजरात|22.30|70.80','जोधपुर|jodhpur|राजस्थान|26.24|73.02',
+      'उदयपुर|udaipur|राजस्थान|24.59|73.71','कोटा|kota|राजस्थान|25.21|75.86','अजमेर|ajmer|राजस्थान|26.45|74.64',
+      'ग्वालियर|gwalior|मध्य प्रदेश|26.22|78.18','जबलपुर|jabalpur|मध्य प्रदेश|23.18|79.94','उज्जैन|ujjain|मध्य प्रदेश|23.18|75.78',
+      'नासिक|nashik|महाराष्ट्र|20.00|73.79','विशाखापत्तनम|visakhapatnam|आंध्र प्रदेश|17.69|83.22','विजयवाड़ा|vijayawada|आंध्र प्रदेश|16.51|80.65',
+      'कोयंबटूर|coimbatore|तमिलनाडु|11.02|76.96','मदुरै|madurai|तमिलनाडु|9.93|78.12','तिरुवनंतपुरम|thiruvananthapuram|केरल|8.52|76.94',
+      'कोच्चि|kochi|केरल|9.93|76.27','मैसूरु|mysuru|कर्नाटक|12.30|76.64','पणजी|panaji|गोवा|15.50|73.83',
+      'गया|gaya|बिहार|24.80|85.00','मुज़फ़्फ़रपुर|muzaffarpur|बिहार|26.12|85.39'
+    ];
+    const CITIES = CITY_RAW.map(s => {
+      const p = s.split('|');
+      return { hi: p[0], en: p[1], st: p[2], lat: parseFloat(p[3]), lon: parseFloat(p[4]) };
+    });
+
+    const GRAHA = [
+      { key: 'sun',  name: 'सूर्य',  ab: 'सू', body: 'Sun' },
+      { key: 'moon', name: 'चंद्रमा', ab: 'चं', body: 'Moon' },
+      { key: 'mars', name: 'मंगल',   ab: 'मं', body: 'Mars' },
+      { key: 'merc', name: 'बुध',    ab: 'बु', body: 'Mercury' },
+      { key: 'jup',  name: 'गुरु',   ab: 'गु', body: 'Jupiter' },
+      { key: 'ven',  name: 'शुक्र',   ab: 'शु', body: 'Venus' },
+      { key: 'sat',  name: 'शनि',    ab: 'श',  body: 'Saturn' }
+    ];
+
+    // विंशोत्तरी क्रम: नक्षत्र संख्या % 9 से स्वामी
+    const DASHA = [['केतु',7],['शुक्र',20],['सूर्य',6],['चंद्र',10],['मंगल',7],['राहु',18],['गुरु',16],['शनि',19],['बुध',17]];
+
+    const AYAN_J2000 = 23.8531;      // लाहिरी अयनांश, J2000 पर
+    const AYAN_RATE = 0.013969;      // अंश प्रति वर्ष (प्रेसेशन)
+    const J2000_MS = Date.UTC(2000, 0, 1, 12);
+    const YEAR_MS = 365.25 * 86400000;
+
+    let lastResult = null;
+
+    /* ---------- HELPERS ---------- */
+    const $ = id => document.getElementById(id);
+    const norm = x => ((x % 360) + 360) % 360;
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    function showError(msg) {
+      const e = $('error');
+      e.textContent = msg;
+      e.style.display = 'block';
+    }
+    function clearError() { $('error').style.display = 'none'; }
+
+    function fmtDeg(d) {
+      let deg = Math.floor(d);
+      let min = Math.floor((d - deg) * 60);
+      return deg + '°' + String(min).padStart(2, '0') + '′';
+    }
+    function fmtDate(ms) {
+      return new Date(ms).toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata', day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+    function fmtDob(dob) {
+      const p = dob.split('-');
+      return p[2] + '/' + p[1] + '/' + p[0];
+    }
+
+    /* ---------- CITY LIST ---------- */
+    (function fillCities() {
+      $('cityList').innerHTML = CITIES.map(c => `<option value="${esc(c.hi + ', ' + c.st)}"></option>`).join('');
+    })();
+
+    function findCity(text) {
+      const q = text.split(',')[0].trim().toLowerCase();
+      if (!q) return null;
+      return CITIES.find(c => c.hi.toLowerCase() === q || c.en === q) || null;
+    }
+
+    /* ---------- ASTRONOMY ---------- */
+    function ayanamsa(date) {
+      return AYAN_J2000 + AYAN_RATE * ((date.getTime() - J2000_MS) / YEAR_MS);
+    }
+
+    // निरयन देशांतर: J2000 ecliptic longitude - J2000 ayanamsa
+    // (precession दोनों तरफ़ कट जाता है, इसलिए यह of-date निरयन के बराबर है)
+    function siderealLon(bodyName, date) {
+      const vec = Astronomy.GeoVector(Astronomy.Body[bodyName], date, true);
+      const ecl = Astronomy.Ecliptic(vec);
+      return norm(ecl.elon - AYAN_J2000);
+    }
+
+    function meanRahu(date) {
+      const T = (date.getTime() - J2000_MS) / (36525 * 86400000);
+      const omegaTropical = 125.04452 - 1934.136261 * T;
+      return norm(omegaTropical - ayanamsa(date));
+    }
+
+    function lagnaSidereal(date, lat, lon) {
+      const gstHours = Astronomy.SiderealTime(date);
+      const theta = norm(gstHours * 15 + lon) * Math.PI / 180;      // RAMC
+      const T = (date.getTime() - J2000_MS) / (36525 * 86400000);
+      const eps = (23.439291 - 0.0130042 * T) * Math.PI / 180;
+      const phi = lat * Math.PI / 180;
+      const y = Math.cos(theta);
+      const x = -(Math.sin(theta) * Math.cos(eps) + Math.tan(phi) * Math.sin(eps));
+      const asc = norm(Math.atan2(y, x) * 180 / Math.PI);
+      return norm(asc - ayanamsa(date));
+    }
+
+    function describe(lon, lagnaIdx) {
+      const rashiIdx = Math.floor(lon / 30);
+      const nakLen = 360 / 27;
+      const nakIdx = Math.floor(lon / nakLen);
+      const pada = Math.floor((lon % nakLen) / (nakLen / 4)) + 1;
+      return {
+        lon,
+        rashiIdx,
+        deg: lon % 30,
+        nakIdx,
+        pada,
+        house: ((rashiIdx - lagnaIdx + 12) % 12) + 1
+      };
+    }
+
+    function buildKundali(date, lat, lon) {
+      const lagnaLon = lagnaSidereal(date, lat, lon);
+      const lagnaIdx = Math.floor(lagnaLon / 30);
+      const lagna = describe(lagnaLon, lagnaIdx);
+
+      const planets = GRAHA.map(g => {
+        const d = describe(siderealLon(g.body, date), lagnaIdx);
+        return Object.assign({ name: g.name, ab: g.ab }, d);
+      });
+
+      const rahuLon = meanRahu(date);
+      const ketuLon = norm(rahuLon + 180);
+      planets.push(Object.assign({ name: 'राहु', ab: 'रा' }, describe(rahuLon, lagnaIdx)));
+      planets.push(Object.assign({ name: 'केतु', ab: 'के' }, describe(ketuLon, lagnaIdx)));
+
+      const moon = planets[1];
+      return { lagna, planets, moon, dasha: vimshottari(moon.lon, date.getTime()) };
+    }
+
+    function vimshottari(moonLon, birthMs) {
+      const nakLen = 360 / 27;
+      const nakIdx = Math.floor(moonLon / nakLen);
+      const frac = (moonLon % nakLen) / nakLen;
+      let idx = nakIdx % 9;
+      const list = [];
+      let start = birthMs;
+      let years = (1 - frac) * DASHA[idx][1];     // जन्म के समय शेष दशा
+      for (let i = 0; i < 9; i++) {
+        const end = start + years * YEAR_MS;
+        list.push({ name: DASHA[idx][0], start, end });
+        start = end;
+        idx = (idx + 1) % 9;
+        years = DASHA[idx][1];
+      }
+      return list;
+    }
+
+    /* ---------- RENDER ---------- */
+    // उत्तर भारतीय शैली: घर 1 ऊपर बीच में, फिर वामावर्त
+    const HOUSE_CENTER = [
+      [150, 75], [75, 38], [38, 75], [75, 150], [38, 225], [75, 262],
+      [150, 225], [225, 262], [262, 225], [225, 150], [262, 75], [225, 38]
+    ];
+
+    function renderChart(k) {
+      const houses = Array.from({ length: 12 }, () => []);
+      k.planets.forEach(p => houses[p.house - 1].push(p.ab));
+
+      let texts = '';
+      for (let h = 0; h < 12; h++) {
+        const rashiNo = ((k.lagna.rashiIdx + h) % 12) + 1;
+        const cx = HOUSE_CENTER[h][0], cy = HOUSE_CENTER[h][1];
+        const lines = [];
+        for (let i = 0; i < houses[h].length; i += 2) lines.push(houses[h].slice(i, i + 2).join(' '));
+        const total = 1 + lines.length;
+        let y = cy - (total - 1) * 8 + 4;
+        let t = `<text x="${cx}" y="${y}" text-anchor="middle" class="rn">${rashiNo}</text>`;
+        lines.forEach((ln, i) => {
+          t += `<text x="${cx}" y="${y + 16 * (i + 1)}" text-anchor="middle" class="pl">${esc(ln)}</text>`;
+        });
+        texts += t;
+      }
+
+      $('chartArea').innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+          <polygon points="0,0 300,0 300,300 0,300" />
+          <line x1="0" y1="0" x2="300" y2="300" />
+          <line x1="300" y1="0" x2="0" y2="300" />
+          <polygon points="150,0 300,150 150,300 0,150" />
+          ${texts}
+        </svg>`;
+    }
+
+    function renderTables(k) {
+      const row = (n, p) => `<tr><td>${esc(n)}</td><td>${RASHI_NAMES[p.rashiIdx]}</td><td>${fmtDeg(p.deg)}</td><td>${NAKSHATRAS[p.nakIdx]} (${p.pada})</td><td>${p.house}</td></tr>`;
+      let rows = row('लग्न', k.lagna);
+      k.planets.forEach(p => { rows += row(p.name, p); });
+      $('grahaTableArea').innerHTML = `
+        <table>
+          <thead><tr><th>ग्रह</th><th>राशि</th><th>अंश</th><th>नक्षत्र (पद)</th><th>भाव</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+
+      const drows = k.dasha.map(d => `<tr><td>${esc(d.name)}</td><td>${fmtDate(d.start)}</td><td>${fmtDate(d.end)}</td></tr>`).join('');
+      $('dashaTableArea').innerHTML = `
+        <table>
+          <thead><tr><th>महादशा</th><th>आरंभ</th><th>समाप्ति</th></tr></thead>
+          <tbody>${drows}</tbody>
+        </table>`;
+    }
+
+    function renderSummary(r) {
+      const k = r.k;
+      $('summaryArea').innerHTML = `
+        <div class="summary">
+          <div><span>नाम</span><b>${esc(r.name)}</b></div>
+          <div><span>जन्म तिथि</span><b>${esc(fmtDob(r.dob))}</b></div>
+          <div><span>समय (IST)</span><b>${esc(r.time)}</b></div>
+          <div><span>स्थान</span><b>${esc(r.place)}</b></div>
+          <div><span>लग्न</span><b>${RASHI_NAMES[k.lagna.rashiIdx]}</b></div>
+          <div><span>चंद्र राशि</span><b>${RASHI_NAMES[k.moon.rashiIdx]}</b></div>
+          <div><span>जन्म नक्षत्र</span><b>${NAKSHATRAS[k.moon.nakIdx]} (पद ${k.moon.pada})</b></div>
+          <div><span>वर्तमान दशा आरंभ</span><b>${esc(k.dasha[0].name)}</b></div>
+        </div>`;
+    }
+
+    /* ---------- FORM ---------- */
+    $('dob').max = new Date().toISOString().split('T')[0];
+
+    $('kundaliForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      clearError();
+
+      const name = $('name').value.trim();
+      const dob = $('dob').value;
+      const time = $('time').value;
+      const place = $('place').value.trim();
+
+      if (!name || !dob || !time || !place) {
+        showError('कृपया सभी विवरण सही-सही भरें।');
+        return;
+      }
+
+      let lat, lon, placeLabel = place;
+      const city = findCity(place);
+      if (city) {
+        lat = city.lat; lon = city.lon;
+        $('manual').style.display = 'none';
+      } else {
+        $('manual').style.display = 'block';
+        lat = parseFloat($('lat').value);
+        lon = parseFloat($('lon').value);
+        if (isNaN(lat) || isNaN(lon) || lat < 6 || lat > 37 || lon < 68 || lon > 98) {
+          showError('यह शहर सूची में नहीं मिला। कृपया नीचे अक्षांश और देशांतर (भारत के भीतर) भरें, फिर दोबारा दबाएँ।');
+          return;
+        }
+      }
+
+      // IST (+05:30) में पार्स करें, ब्राउज़र के टाइमज़ोन में नहीं
+      const date = new Date(`${dob}T${time}:00+05:30`);
+      if (isNaN(date.getTime())) {
+        showError('जन्म तिथि या समय सही नहीं है।');
+        return;
+      }
+
+      const btn = $('btn');
+      btn.disabled = true;
+      btn.textContent = 'गणना की जा रही है...';
+
+      try {
+        if (typeof Astronomy === 'undefined') throw new Error('astronomy library not loaded');
+        const k = buildKundali(date, lat, lon);
+        lastResult = { name, dob, time, place: placeLabel, k };
+
+        renderSummary(lastResult);
+        renderChart(k);
+        renderTables(k);
+
+        $('payMsg').textContent = '';
+        $('result').style.display = 'block';
+        $('result').scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        console.error(err);
+        showError('कुंडली बनाने में समस्या आई, कृपया पेज रिफ़्रेश करके दोबारा प्रयास करें।');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'मेरी कुंडली बनाएँ';
+      }
+    });
+
+    /* ---------- PAYMENT (server-verified) ---------- */
+    function setPayMsg(msg) { $('payMsg').textContent = msg; }
+
+    async function payAndDownload() {
+      if (!lastResult) { setPayMsg('पहले कुंडली बनाएँ।'); return; }
+      const payBtn = $('payBtn');
+      payBtn.disabled = true;
+      setPayMsg('ऑर्डर बन रहा है...');
+
+      try {
+        const res = await fetch(API_BASE + '/api/create-order', { method: 'POST' });
+        if (!res.ok) throw new Error('order failed');
+        const order = await res.json();
+
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: order.amount,
+          currency: 'INR',
+          order_id: order.orderId,
+          name: 'शुभ कुंडली',
+          description: 'जन्म कुंडली PDF डाउनलोड शुल्क',
+          prefill: { name: lastResult.name },
+          theme: { color: '#7b160e' },
+          handler: async function (response) {
+            setPayMsg('भुगतान की जाँच हो रही है...');
+            try {
+              const v = await fetch(API_BASE + '/api/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              });
+              const data = await v.json();
+              if (data.ok) {
+                setPayMsg('भुगतान सफल। PDF बन रही है...');
+                generatePDF();
+              } else {
+                setPayMsg('भुगतान सत्यापित नहीं हो सका। कृपया संपर्क करें। Payment ID: ' + response.razorpay_payment_id);
+              }
+            } catch (e) {
+              setPayMsg('सत्यापन में समस्या। कृपया संपर्क करें। Payment ID: ' + response.razorpay_payment_id);
+            } finally {
+              payBtn.disabled = false;
+            }
+          },
+          modal: { ondismiss: function () { payBtn.disabled = false; setPayMsg(''); } }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function () {
+          payBtn.disabled = false;
+          setPayMsg('भुगतान असफल रहा। कृपया दोबारा प्रयास करें।');
+        });
+        setPayMsg('');
+        rzp.open();
+      } catch (err) {
+        console.error(err);
+        payBtn.disabled = false;
+        setPayMsg('भुगतान शुरू नहीं हो सका। कृपया बाद में प्रयास करें।');
+      }
+    }
+    $('payBtn').addEventListener('click', payAndDownload);
+
+    function generatePDF() {
+      const element = $('pdfPrintArea');
+      const safeName = (lastResult ? lastResult.name : 'Kundali').replace(/[^\p{L}\p{N}_-]+/gu, '_');
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: `${safeName}_Janm_Kundali.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      setTimeout(() => {
+        html2pdf().set(opt).from(element).save().then(() => setPayMsg('PDF डाउनलोड हो गई।'));
+      }, 400);
+    }
+  </script>
+</body>
+</html>
