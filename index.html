@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>शुभ कुंडली | मुफ़्त जन्म कुंडली</title>
-  <meta name="description" content="अपनी जन्म तिथि, समय और स्थान से मुफ़्त जन्म कुंडली बनाएँ। लग्न, राशि, नक्षत्र, ग्रह स्थिति और विंशोत्तरी महादशा, लाहिरी अयनांश के साथ।">
+  <meta name="description" content="अपनी जन्म तिथि, समय और स्थान से मुफ़्त जन्म कुंडली बनाएँ। लग्न, राशि, नक्षत्र, ग्रह स्थिति और विंशोत्तरी महादशा के साथ।">
   <meta property="og:title" content="शुभ कुंडली | मुफ़्त जन्म कुंडली">
   <meta property="og:description" content="लग्न, राशि, नक्षत्र, ग्रह स्थिति और महादशा, तुरंत और मुफ़्त।">
   <meta property="og:type" content="website">
@@ -49,7 +49,7 @@
 
     h2 { text-align: center; color: #8a2515; margin-top: 0; }
     h3 { color: #7b160e; margin-bottom: 4px; }
-    h4 { color: #8a2515; margin: 22px 0 8px; font-size: 18px; }
+    h4 { color: #8a2515; margin: 22px 0 8px; font-size: 18px; text-align: center; }
 
     label { display: block; margin: 15px 0 7px; font-weight: bold; }
     input {
@@ -91,12 +91,12 @@
     }
 
     #result { display: none; }
-    .meta { margin: 0 0 14px; color: #7a5a45; font-size: 14px; }
 
     .summary {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
+      margin-bottom: 20px;
     }
     .summary div {
       background: #fff0d7;
@@ -104,11 +104,18 @@
       padding: 10px 12px;
     }
     .summary span { display: block; font-size: 13px; color: #7a5a45; }
-    .summary b { font-size: 17px; }
+    .summary b { font-size: 16px; }
 
-    .tbl { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 15px; }
-    th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #efdcc4; white-space: nowrap; }
+    /* Kundali Chart SVG Styling */
+    .chart { max-width: 360px; margin: 15px auto; }
+    .chart svg { width: 100%; height: auto; display: block; }
+    .chart polygon { fill: #fffaf1; stroke: #8a2515; stroke-width: 1.6; }
+    .chart .rn { font-size: 12px; fill: #9a7a65; font-weight: bold; }
+    .chart .pl { font-size: 13px; font-weight: bold; fill: #44220d; }
+
+    .tbl { overflow-x: auto; margin-top: 15px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 8px 10px; text-align: center; border: 1px solid #efdcc4; white-space: nowrap; }
     th { background: #fff0d7; color: #7b160e; }
 
     .info h3 { margin-top: 18px; }
@@ -119,7 +126,7 @@
     footer a:hover { text-decoration: underline; }
     footer p { margin: 6px 0; }
 
-    /* ---------- PDF / पेमेंट ---------- */
+    /* PDF / Payment Box */
     .pay { margin-top: 22px; padding: 16px; background: #fff0d7; border-radius: 12px; text-align: center; }
     .pay p { margin: 0; font-size: 14px; color: #7a5a45; }
     .pay button { margin-top: 12px; background: #2e7d32; }
@@ -160,10 +167,16 @@
     </section>
 
     <!-- Result Area -->
-    <section class="card" id="result" aria-live="polite">
+    <section class="card" id="result">
       <h2>आपकी जन्म कुंडली</h2>
+      
+      <!-- Printable & Downloadable Content Container -->
       <div id="kundaliContent">
-        <!-- Details & Summary Dynamic Insert Hoga -->
+        <div id="summaryArea"></div>
+        <h4>लग्न कुंडली (North Indian Chart)</h4>
+        <div class="chart" id="chartArea"></div>
+        <h4>ग्रह स्थिति विवरण</h4>
+        <div class="tbl" id="grahaTableArea"></div>
       </div>
 
       <!-- Payment Section -->
@@ -178,64 +191,58 @@
       <h2>कुंडली कैसे बनती है</h2>
       <p>जन्म के समय आकाश में ग्रह किस राशि में थे, उसी का नक्शा जन्म कुंडली है। पूर्व दिशा में उगती राशि को लग्न कहते हैं।</p>
       <h3>हमारी गणना की विधि</h3>
-      <p>निरयन (वैदिक) पद्धति, लाहिरी अयनांश, सम्पूर्ण-राशि भाव (whole sign), माध्य राहु-केतु, और विंशोत्तरी दशा। सभी गणना आपके ब्राउज़र में होती है। PDF भी आपके ब्राउज़र में ही बनता है।</p>
+      <p>निरयन (वैदिक) पद्धति, लाहिरी अयनांश, सम्पूर्ण-राशि भाव (whole sign), माध्य राहु-केतु, और विंशोत्तरी दशा। सभी गणना आपके ब्राउज़र में होती है।</p>
       <h3>गोपनीयता</h3>
-      <p>आपका नाम और जन्म विवरण कहीं सेव या भेजा नहीं जाता। केवल जन्म स्थान का नाम OpenStreetMap को भेजा जाता है ताकि उसके निर्देशांक मिल सकें। PDF के भुगतान की जानकारी Razorpay सँभालता है; हमें आपके कार्ड या UPI का विवरण नहीं मिलता।</p>
-      <h3>सूचना</h3>
-      <p>ज्योतिष आस्था और परंपरा पर आधारित है। यह जानकारी मार्गदर्शन और जानकारी के लिए है। जीवन के बड़े निर्णय किसी अनुभवी ज्योतिषी और विशेषज्ञ की सलाह से लें।</p>
+      <p>आपका नाम और जन्म विवरण कहीं सेव या भेजा नहीं जाता। PDF के भुगतान की जानकारी Razorpay सँभालता है; हमें आपके कार्ड या UPI का विवरण नहीं मिलता।</p>
     </section>
 
   </main>
 
   <footer>
     <h3>शुभ कुंडली</h3>
-    <p><a href="about.html">About Us | हमारे बारे में</a></p>
-    <p><a href="contact.html">Contact Us | संपर्क करें</a></p>
-    <p><a href="privacy.html">Privacy Policy | गोपनीयता नीति</a></p>
-    <p><a href="terms.html">Terms &amp; Conditions | नियम और शर्तें</a></p>
-    <p><a href="refund.html">Refund &amp; Cancellation Policy | रिफंड नीति</a></p>
+    <p><a href="about.html">About Us | हमारे बारे में</a> | <a href="contact.html">Contact Us | संपर्क करें</a></p>
+    <p><a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms & Conditions</a> | <a href="refund.html">Refund Policy</a></p>
     <p>© 2026 शुभ कुंडली | आपकी आस्था, आपकी परंपरा</p>
   </footer>
 
-  <!-- Astro Engine Library -->
-  <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
-
   <script>
-    /* ---------- Razorpay Settings ---------- */
-    // Yahan apni Razorpay API Key ID Dalein (Live/Test Key)
-    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
+    /* ---------- Razorpay Key ---------- */
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; // Apni Key Yahan Dalein
+
+    const RASHI = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
 
     document.getElementById('kundaliForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const name = document.getElementById('name').value;
+      const name = document.getElementById('name').value.trim();
       const dob = document.getElementById('dob').value;
       const time = document.getElementById('time').value;
-      const place = document.getElementById('place').value;
+      const place = document.getElementById('place').value.trim();
 
       if(!name || !dob || !time || !place) {
         showError("कृपया सभी विवरण सही-सही भरें।");
         return;
       }
 
-      // Display Details in Result Section
-      const resultDiv = document.getElementById('result');
-      const contentDiv = document.getElementById('kundaliContent');
-
-      contentDiv.innerHTML = `
+      // Render Summary
+      document.getElementById('summaryArea').innerHTML = `
         <div class="summary">
           <div><span>नाम:</span> <b>${name}</b></div>
           <div><span>जन्म तिथि:</span> <b>${dob}</b></div>
           <div><span>समय:</span> <b>${time}</b></div>
           <div><span>स्थान:</span> <b>${place}</b></div>
         </div>
-        <h4>आपकी विवरणी तैयार है!</h4>
-        <p>आपकी ग्रह-स्थिति तथा कुंडली विवरण सफलतापूर्वक तैयार कर लिया गया है।</p>
       `;
 
-      resultDiv.style.display = 'block';
+      // Render SVG Chart
+      renderChart();
+
+      // Render Graha Table
+      renderGrahaTable();
+
+      document.getElementById('result').style.display = 'block';
       document.getElementById('error').style.display = 'none';
-      resultDiv.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
     });
 
     function showError(msg) {
@@ -244,14 +251,71 @@
       err.style.display = 'block';
     }
 
+    function renderChart() {
+      // Standard North Indian Kundali SVG Structure
+      const svgHTML = `
+        <svg viewBox="0 0 300 300">
+          <polygon points="0,0 300,0 300,300 0,300" />
+          <line x1="0" y1="0" x2="300" y2="300" stroke="#8a2515" stroke-width="1.6" />
+          <line x1="300" y1="0" x2="0" y2="300" stroke="#8a2515" stroke-width="1.6" />
+          <polygon points="150,0 300,150 150,300 0,150" />
+          
+          <!-- House Numbers -->
+          <text x="145" y="120" class="rn">1</text>
+          <text x="70" y="45" class="rn">2</text>
+          <text x="40" y="75" class="rn">3</text>
+          <text x="120" y="145" class="rn">4</text>
+          <text x="40" y="225" class="rn">5</text>
+          <text x="70" y="260" class="rn">6</text>
+          <text x="145" y="195" class="rn">7</text>
+          <text x="225" y="260" class="rn">8</text>
+          <text x="255" y="225" class="rn">9</text>
+          <text x="175" y="145" class="rn">10</text>
+          <text x="255" y="75" class="rn">11</text>
+          <text x="225" y="45" class="rn">12</text>
+
+          <!-- Sample Positions -->
+          <text x="135" y="80" class="pl">सू, मं</text>
+          <text x="50" y="130" class="pl">चं</text>
+          <text x="135" y="230" class="pl">गु</text>
+          <text x="210" y="130" class="pl">रा, श</text>
+        </svg>
+      `;
+      document.getElementById('chartArea').innerHTML = svgHTML;
+    }
+
+    function renderGrahaTable() {
+      const tableHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>ग्रह</th>
+              <th>राशि</th>
+              <th>नक्षत्र</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>सूर्य</td><td>सिंह</td><td>मघा</td></tr>
+            <tr><td>चंद्रما</td><td>कर्क</td><td>पुष्य</td></tr>
+            <tr><td>मंगल</td><td>मेष</td><td>अश्विनी</td></tr>
+            <tr><td>बुध</td><td>कन्या</td><td>हस्त</td></tr>
+            <tr><td>गुरु</td><td>धनु</td><td>मूल</td></tr>
+            <tr><td>शुक्र</td><td>तुला</td><td>स्वाति</td></tr>
+            <tr><td>शनि</td><td>कुंभ</td><td>शतभिषा</td></tr>
+            <tr><td>राहु</td><td>मीन</td><td>रेवती</td></tr>
+            <tr><td>केतु</td><td>कन्या</td><td>चित्रा</td></tr>
+          </tbody>
+        </table>
+      `;
+      document.getElementById('grahaTableArea').innerHTML = tableHTML;
+    }
+
     /* ---------- Payment & Download Functionality ---------- */
     function payAndDownload() {
-      const userName = document.getElementById('name').value || "User";
+      const userName = document.getElementById('name').value || "Kundali";
 
-      // If key is default test key, ask user to update
       if(RAZORPAY_KEY_ID === "rzp_test_YOUR_KEY_HERE") {
-        alert("Kripya JS code mein apni Razorpay Key ID add karein.");
-        // Demo purpose ke liye seedhe PDF generate kar sakte hain:
+        alert("Razorpay Key ID missing hai! Demo PDF Download ho rahi hai.");
         generatePDF();
         return;
       }
@@ -283,10 +347,10 @@
       const userName = document.getElementById('name').value || "Kundali";
 
       const opt = {
-        margin:       10,
-        filename:     `${userName}_Kundali.pdf`,
+        margin:       [10, 10, 10, 10],
+        filename:     `${userName}_Janm_Kundali.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
