@@ -105,21 +105,21 @@
     .summary span { display: block; font-size: 13px; color: #7a5a45; }
     .summary b { font-size: 16px; }
 
-    /* Kundali Chart SVG Styling */
-    .chart { max-width: 360px; margin: 15px auto; }
-    .chart svg { width: 100%; height: auto; display: block; }
+    /* Kundali Chart SVG Styling Fixes */
+    .chart { max-width: 360px; margin: 15px auto; text-align: center; }
+    .chart svg { width: 100%; height: auto; max-width: 350px; display: block; margin: 0 auto; background: #fffaf1; }
     .chart polygon { fill: #fffaf1; stroke: #8a2515; stroke-width: 1.6; }
     .chart line { stroke: #8a2515; stroke-width: 1.6; }
     .chart .rn { font-size: 12px; fill: #9a7a65; font-weight: bold; }
     .chart .pl { font-size: 13px; font-weight: bold; fill: #44220d; }
 
     .tbl { overflow-x: auto; margin-top: 15px; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #ffffff; }
     th, td { padding: 8px 10px; text-align: center; border: 1px solid #efdcc4; white-space: nowrap; }
     th { background: #fff0d7; color: #7b160e; }
 
-    /* PDF Printable Container */
-    #pdfPrintArea { padding: 15px; background: #ffffff; }
+    /* PDF Printable Container Container Styling */
+    #pdfPrintArea { padding: 15px; background: #ffffff; border-radius: 8px; }
 
     .info h3 { margin-top: 18px; }
     .info p { margin: 6px 0; }
@@ -297,7 +297,7 @@
 
     function renderChart() {
       const svgHTML = `
-        <svg viewBox="0 0 300 300">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
           <polygon points="0,0 300,0 300,300 0,300" />
           <line x1="0" y1="0" x2="300" y2="300" />
           <line x1="300" y1="0" x2="0" y2="300" />
@@ -338,7 +338,7 @@
       document.getElementById('grahaTableArea').innerHTML = tableHTML;
     }
 
-    /* ---------- PAYMENT & DOWNLOAD SYSTEM ---------- */
+    /* ---------- FIXED PAYMENT & PDF DOWNLOAD SYSTEM ---------- */
     function payAndDownload() {
       const userName = document.getElementById('name').value || "User";
 
@@ -368,15 +368,25 @@
       const element = document.getElementById('pdfPrintArea');
       const userName = document.getElementById('name').value || "Kundali";
 
+      // PDF options tailored for mobile html2canvas compatibility
       const opt = {
-        margin:       [10, 10, 10, 10],
-        filename:     `${userName}_Kundali.pdf`,
+        margin:       [8, 8, 8, 8],
+        filename:     `${userName}_Janm_Kundali.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+        html2canvas:  { 
+          scale: 2, 
+          useCORS: true, 
+          logging: false,
+          allowTaint: true,
+          backgroundColor: '#ffffff'
+        },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(element).save();
+      // Delay execution to let graphics finish rendering in memory
+      setTimeout(() => {
+        html2pdf().set(opt).from(element).save();
+      }, 600);
     }
   </script>
 
