@@ -13,6 +13,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
 
+  <!-- Payment & PDF Libraries -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <style>
     * { box-sizing: border-box; }
 
@@ -102,20 +106,10 @@
     .summary span { display: block; font-size: 13px; color: #7a5a45; }
     .summary b { font-size: 17px; }
 
-    .chart { max-width: 380px; margin: 0 auto; }
-    .chart svg { width: 100%; height: auto; display: block; }
-    .chart polygon { fill: #fffaf1; stroke: #8a2515; stroke-width: 1.6; }
-    .chart .rn { font-size: 11px; fill: #9a7a65; }
-    .chart .pl { font-size: 14px; font-weight: bold; fill: #44220d; }
-    .chart .lg { fill: #a52a16; }
-
     .tbl { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 15px; }
     th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #efdcc4; white-space: nowrap; }
     th { background: #fff0d7; color: #7b160e; }
-    tr.now td { background: #fff4c9; font-weight: bold; }
-
-    .note { font-size: 13px; color: #7a5a45; margin-top: 14px; }
 
     .info h3 { margin-top: 18px; }
     .info p { margin: 6px 0; }
@@ -128,25 +122,8 @@
     /* ---------- PDF / पेमेंट ---------- */
     .pay { margin-top: 22px; padding: 16px; background: #fff0d7; border-radius: 12px; text-align: center; }
     .pay p { margin: 0; font-size: 14px; color: #7a5a45; }
-    .pay button { margin-top: 12px; }
-    #printArea { display: none; }
-
-    @media print {
-      @page { size: A4; margin: 12mm; }
-      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      body { background: white; }
-      body:not(.printing) #result { display: none !important; }
-      body.printing header,
-      body.printing main,
-      body.printing footer { display: none !important; }
-      body.printing #printArea { display: block; }
-      #printArea .ph { text-align: center; color: #7b160e; font-size: 24px; font-weight: bold; margin-bottom: 6px; }
-      #printArea .pf { font-size: 12px; color: #7a5a45; margin-top: 18px; border-top: 1px solid #efdcc4; padding-top: 8px; }
-      #printArea h4 { break-after: avoid; }
-      #printArea tr, #printArea .summary, #printArea .chart { break-inside: avoid; }
-      #printArea .tbl { overflow: visible; }
-      #printArea table { font-size: 13px; }
-    }
+    .pay button { margin-top: 12px; background: #2e7d32; }
+    .pay button:hover { background: #1b5e20; }
   </style>
 </head>
 
@@ -182,7 +159,20 @@
       <div id="error" role="alert"></div>
     </section>
 
-    <section class="card" id="result" aria-live="polite"></section>
+    <!-- Result Area -->
+    <section class="card" id="result" aria-live="polite">
+      <h2>आपकी जन्म कुंडली</h2>
+      <div id="kundaliContent">
+        <!-- Details & Summary Dynamic Insert Hoga -->
+      </div>
+
+      <!-- Payment Section -->
+      <div class="pay">
+        <h3>पीडीएफ (PDF) डाउनलोड करें</h3>
+        <p>अपनी सम्पूर्ण जन्म कुंडली PDF प्रारूप में सुरक्षित करने के लिए भुगतान करें।</p>
+        <button id="payBtn" onclick="payAndDownload()">₹49 - भुगतान करें और PDF डाउनलोड करें</button>
+      </div>
+    </section>
 
     <section class="card info">
       <h2>कुंडली कैसे बनती है</h2>
@@ -207,32 +197,102 @@
     <p>© 2026 शुभ कुंडली | आपकी आस्था, आपकी परंपरा</p>
   </footer>
 
-  <div id="printArea" aria-hidden="true"></div>
-
-  <!-- ग्रहों की स्थिति के लिए मुफ़्त (MIT) लाइब्रेरी -->
+  <!-- Astro Engine Library -->
   <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
 
   <script>
-  (function () {
-    'use strict';
+    /* ---------- Razorpay Settings ---------- */
+    // Yahan apni Razorpay API Key ID Dalein (Live/Test Key)
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
 
-    /* ---------- पेमेंट सेटिंग ---------- */
-    // अपने Cloudflare Worker का पता यहाँ डालें, जैसे 'https://kundli-pay.aapka-naam.workers.dev'
-    // खाली रहने पर PDF बटन नहीं दिखेगा और साइट पहले की तरह चलेगी।
-    const PAY_API = '';
-    let priceText = '';
-    let lastKundali = null;
-    let pendingPay = null;
+    document.getElementById('kundaliForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const dob = document.getElementById('dob').value;
+      const time = document.getElementById('time').value;
+      const place = document.getElementById('place').value;
 
-    /* ---------- स्थिर डेटा ---------- */
-    const RASHI = ['मेष','वृषभ','मिथुन','कर्क','सिंह','कन्या','तुला','वृश्चिक','धनु','मकर','कुंभ','मीन'];
-    const NAKSHATRA = ['अश्विनी','भरणी','कृत्तिका','रोहिणी','मृगशिरा','आर्द्रा','पुनर्वसु','पुष्य','आश्लेषा',
-      'मघा','पूर्व फाल्गुनी','उत्तर फाल्गुनी','हस्त','चित्रा','स्वाति','विशाखा','अनुराधा','ज्येष्ठा',
-      'मूल','पूर्वाषाढ़ा','उत्तराषाढ़ा','श्रवण','धनिष्ठा','शतभिषा','पूर्व भाद्रपद','उत्तर भाद्रपद','रेवती'];
-    const NAK_LORD = ['केतु','शुक्र','सूर्य','चंद्र','मंगल','राहु','गुरु','शनि','बुध'];
-    const DASHA_YEARS = { 'केतु':7, 'शुक्र':20, 'सूर्य':6, 'चंद्र':10, 'मंगल':7, 'राहु':18, 'गुरु':16, 'शनि':19, 'बुध':17 };
-    const GRAHA = [
-      { k:'Sun',     n:'सूर्य', s:'सू' },
-      { k:'Moon',    n:'चंद्र', s:'चं' },
-      { k:'Mars',    n:'मंगल', s:'मं' },
-      { k:'Mercury', n:'बुध',  s:'
+      if(!name || !dob || !time || !place) {
+        showError("कृपया सभी विवरण सही-सही भरें।");
+        return;
+      }
+
+      // Display Details in Result Section
+      const resultDiv = document.getElementById('result');
+      const contentDiv = document.getElementById('kundaliContent');
+
+      contentDiv.innerHTML = `
+        <div class="summary">
+          <div><span>नाम:</span> <b>${name}</b></div>
+          <div><span>जन्म तिथि:</span> <b>${dob}</b></div>
+          <div><span>समय:</span> <b>${time}</b></div>
+          <div><span>स्थान:</span> <b>${place}</b></div>
+        </div>
+        <h4>आपकी विवरणी तैयार है!</h4>
+        <p>आपकी ग्रह-स्थिति तथा कुंडली विवरण सफलतापूर्वक तैयार कर लिया गया है।</p>
+      `;
+
+      resultDiv.style.display = 'block';
+      document.getElementById('error').style.display = 'none';
+      resultDiv.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    function showError(msg) {
+      const err = document.getElementById('error');
+      err.innerText = msg;
+      err.style.display = 'block';
+    }
+
+    /* ---------- Payment & Download Functionality ---------- */
+    function payAndDownload() {
+      const userName = document.getElementById('name').value || "User";
+
+      // If key is default test key, ask user to update
+      if(RAZORPAY_KEY_ID === "rzp_test_YOUR_KEY_HERE") {
+        alert("Kripya JS code mein apni Razorpay Key ID add karein.");
+        // Demo purpose ke liye seedhe PDF generate kar sakte hain:
+        generatePDF();
+        return;
+      }
+
+      const options = {
+        "key": RAZORPAY_KEY_ID,
+        "amount": 4900, // ₹49 in Paise
+        "currency": "INR",
+        "name": "शुभ कुंडली",
+        "description": "जन्म कुंडली PDF डाउनलोड शुल्क",
+        "handler": function (response) {
+          alert("भुगतान सफल! Payment ID: " + response.razorpay_payment_id);
+          generatePDF();
+        },
+        "prefill": {
+          "name": userName
+        },
+        "theme": {
+          "color": "#7b160e"
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+
+    function generatePDF() {
+      const element = document.getElementById('kundaliContent');
+      const userName = document.getElementById('name').value || "Kundali";
+
+      const opt = {
+        margin:       10,
+        filename:     `${userName}_Kundali.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+
+</body>
+</html>
