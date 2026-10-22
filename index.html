@@ -153,7 +153,7 @@
   <script>
     /* ---------- CONFIG ---------- */
     // Key ID public hoti hai. Key SECRET kabhi yahan mat daalna (sirf server.js mein).
-    const RAZORPAY_KEY_ID = "rzp_live_TqmQuCXdQDK5fN";
+    const RAZORPAY_KEY_ID = "rzp_test_Tqq0KnJYpxpTjz";
     // Apne Cloudflare Worker ka URL yahan daalein (aakhir mein / mat lagana).
     // Jaise: "https://kundali.aapka-naam.workers.dev"
     const API_BASE = "https://kundali.kanchan7087.workers.dev";
@@ -391,4 +391,161 @@
       const k = r.k;
       $('summaryArea').innerHTML = `
         <div class="summary">
-          <div><span>नाम</span><b>${esc(r.name)}</
+          <div><span>नाम</span><b>${esc(r.name)}</b></div>
+          <div><span>जन्म तिथि</span><b>${esc(fmtDob(r.dob))}</b></div>
+          <div><span>समय (IST)</span><b>${esc(r.time)}</b></div>
+          <div><span>स्थान</span><b>${esc(r.place)}</b></div>
+          <div><span>लग्न</span><b>${RASHI_NAMES[k.lagna.rashiIdx]}</b></div>
+          <div><span>चंद्र राशि</span><b>${RASHI_NAMES[k.moon.rashiIdx]}</b></div>
+          <div><span>जन्म नक्षत्र</span><b>${NAKSHATRAS[k.moon.nakIdx]} (पद ${k.moon.pada})</b></div>
+          <div><span>वर्तमान दशा आरंभ</span><b>${esc(k.dasha[0].name)}</b></div>
+        </div>`;
+    }
+
+    /* ---------- FORM ---------- */
+    $('dob').max = new Date().toISOString().split('T')[0];
+
+    $('kundaliForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      clearError();
+
+      const name = $('name').value.trim();
+      const dob = $('dob').value;
+      const time = $('time').value;
+      const place = $('place').value.trim();
+
+      if (!name || !dob || !time || !place) {
+        showError('कृपया सभी विवरण सही-सही भरें।');
+        return;
+      }
+
+      let lat, lon, placeLabel = place;
+      const city = findCity(place);
+      if (city) {
+        lat = city.lat; lon = city.lon;
+        $('manual').style.display = 'none';
+      } else {
+        $('manual').style.display = 'block';
+        lat = parseFloat($('lat').value);
+        lon = parseFloat($('lon').value);
+        if (isNaN(lat) || isNaN(lon) || lat < 6 || lat > 37 || lon < 68 || lon > 98) {
+          showError('यह शहर सूची में नहीं मिला। कृपया नीचे अक्षांश और देशांतर (भारत के भीतर) भरें, फिर दोबारा दबाएँ।');
+          return;
+        }
+      }
+
+      // IST (+05:30) में पार्स करें, ब्राउज़र के टाइमज़ोन में नहीं
+      const date = new Date(`${dob}T${time}:00+05:30`);
+      if (isNaN(date.getTime())) {
+        showError('जन्म तिथि या समय सही नहीं है।');
+        return;
+      }
+
+      const btn = $('btn');
+      btn.disabled = true;
+      btn.textContent = 'गणना की जा रही है...';
+
+      try {
+        if (typeof Astronomy === 'undefined') throw new Error('astronomy library not loaded');
+        const k = buildKundali(date, lat, lon);
+        lastResult = { name, dob, time, place: placeLabel, k };
+
+        renderSummary(lastResult);
+        renderChart(k);
+        renderTables(k);
+
+        $('payMsg').textContent = '';
+        $('result').style.display = 'block';
+        $('result').scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        console.error(err);
+        showError('कुंडली बनाने में समस्या आई, कृपया पेज रिफ़्रेश करके दोबारा प्रयास करें।');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'मेरी कुंडली बनाएँ';
+      }
+    });
+
+    /* ---------- PAYMENT (server-verified) ---------- */
+    function setPayMsg(msg) { $('payMsg').textContent = msg; }
+
+    async function payAndDownload() {
+      if (!lastResult) { setPayMsg('पहले कुंडली बनाएँ।'); return; }
+      const payBtn = $('payBtn');
+      payBtn.disabled = true;
+      setPayMsg('ऑर्डर बन रहा है...');
+
+      try {
+        const res = await fetch(API_BASE + '/api/create-order', { method: 'POST' });
+        if (!res.ok) throw new Error('order failed');
+        const order = await res.json();
+
+        const options = {
+          key: RAZORPAY_KEY_ID,
+          amount: order.amount,
+          currency: 'INR',
+          order_id: order.orderId,
+          name: 'शुभ कुंडली',
+          description: 'जन्म कुंडली PDF डाउनलोड शुल्क',
+          prefill: { name: lastResult.name },
+          theme: { color: '#7b160e' },
+          handler: async function (response) {
+            setPayMsg('भुगतान की जाँच हो रही है...');
+            try {
+              const v = await fetch(API_BASE + '/api/verify-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature
+                })
+              });
+              const data = await v.json();
+              if (data.ok) {
+                setPayMsg('भुगतान सफल। PDF बन रही है...');
+                generatePDF();
+              } else {
+                setPayMsg('भुगतान सत्यापित नहीं हो सका। कृपया संपर्क करें। Payment ID: ' + response.razorpay_payment_id);
+              }
+            } catch (e) {
+              setPayMsg('सत्यापन में समस्या। कृपया संपर्क करें। Payment ID: ' + response.razorpay_payment_id);
+            } finally {
+              payBtn.disabled = false;
+            }
+          },
+          modal: { ondismiss: function () { payBtn.disabled = false; setPayMsg(''); } }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function () {
+          payBtn.disabled = false;
+          setPayMsg('भुगतान असफल रहा। कृपया दोबारा प्रयास करें।');
+        });
+        setPayMsg('');
+        rzp.open();
+      } catch (err) {
+        console.error(err);
+        payBtn.disabled = false;
+        setPayMsg('भुगतान शुरू नहीं हो सका। कृपया बाद में प्रयास करें।');
+      }
+    }
+    $('payBtn').addEventListener('click', payAndDownload);
+
+    function generatePDF() {
+      const element = $('pdfPrintArea');
+      const safeName = (lastResult ? lastResult.name : 'Kundali').replace(/[^\p{L}\p{N}_-]+/gu, '_');
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: `${safeName}_Janm_Kundali.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      setTimeout(() => {
+        html2pdf().set(opt).from(element).save().then(() => setPayMsg('PDF डाउनलोड हो गई।'));
+      }, 400);
+    }
+  </script>
+</body>
+</html>
